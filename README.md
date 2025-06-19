@@ -49,7 +49,7 @@ The integration provides these services:
 
 ### Option 1: HACS (Recommended)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=zanooda&repository=sunshine-homeassistant&category=integration)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=librescoot&repository=sunshine-homeassistant&category=integration)
 
 1. Click the button above to add this repository to HACS
 2. Or manually add the repository:
