@@ -7,21 +7,40 @@ This custom component integrates Sunshine scooters with Home Assistant, providin
 
 ## Features
 
+Each scooter is added as a device using its name as the friendly name (falls back to VIN if unnamed). The odometer is tracked as a long-term statistic.
+
 ### Entities Created per Scooter
 
 #### Device Tracker
 - **Location**: GPS tracking with map visualization
-- Shows scooter location on Home Assistant map
-- Enables zone-based automations
 
 #### Sensors
 - **Battery Level**: Current battery percentage
 - **Speed**: Current speed in km/h
-- **Odometer**: Total distance traveled in km
-- **Status**: Current scooter status
+- **Odometer**: Total distance traveled in km (long-term statistic)
+- **Status**: Current scooter state
+- **Alarm State**: Current alarm state
+- **Kickstand**: Kickstand position
+- **Seatbox**: Seatbox state
+- **Last Seen**: Timestamp of last communication
+- **Battery Voltage**: Main battery voltage
+- **Battery Health**: Main battery state of health
+- **Battery Cycle Count**: Main battery charge cycles
+- **Battery State**: Main battery state
+- **Battery 1 Level/Voltage/Health/Cycle Count/State**: Second battery (if present)
+- **Aux Battery Level/Voltage**: Auxiliary battery
+- **CBB Battery Level/Health/Cycle Count**: CBB battery
+- **Engine Temperature**: Motor temperature
+- **Motor RPM**: Motor speed
+- **Signal Quality**: Cellular signal quality
 
-#### Switch
+#### Binary Sensors
+- **Online**: Scooter connectivity status
+- **Alarm Triggered**: Whether the alarm is currently triggered
+
+#### Switches
 - **Lock**: Lock/unlock the scooter
+- **Alarm Armed**: Arm/disarm the alarm system
 
 #### Select Controls
 - **Blinkers**: Control turn signals (off, left, right, both)
@@ -31,19 +50,20 @@ This custom component integrates Sunshine scooters with Home Assistant, providin
 - **Honk**: Activate horn
 - **Locate**: Find your scooter
 - **Ping**: Check connectivity
-- **Make Noise**: Alternative noise function
 - **Open Seatbox**: Open storage compartment
-- **Request Telemetry**: Get fresh data
-- **Update Firmware**: Initiate firmware update
+- **Request State**: Get fresh telemetry data
 - **Alarm (5s)**: Quick 5-second alarm
+- **Arm Alarm**: Arm the alarm system
+- **Disarm Alarm**: Disarm the alarm system
+- **Stop Alarm**: Stop an active alarm
+- **Hibernate**: Put scooter into hibernation mode
 
 ### Services
 
-The integration provides these services:
-
 - `sunshine.trigger_alarm`: Trigger alarm with custom duration
-- `sunshine.request_telemetry`: Request fresh telemetry data
-- `sunshine.update_firmware`: Initiate firmware update
+- `sunshine.get_state`: Request fresh telemetry data
+- `sunshine.set_destination`: Set a navigation destination (latitude, longitude, optional address)
+- `sunshine.clear_destination`: Clear the current navigation destination
 
 ## Installation
 
@@ -78,15 +98,6 @@ The integration is configured through the UI. You'll need:
 - **API Token**: Your Sunshine API bearer token
 - **Base URL** (optional): Default is https://sunshine.rescoot.org
 
-## Architecture Improvements
-
-This integration implements several best practices:
-
-1. **Centralized Data Coordinator**: Uses `DataUpdateCoordinator` to fetch data once for all entities, preventing N+1 API calls
-2. **Native Device Tracking**: Implements `DeviceTrackerEntity` for proper GPS visualization
-3. **Smart Entity Selection**: Uses `SelectEntity` for mutually exclusive options (blinkers, sounds)
-4. **Service Flexibility**: Custom services accept duration parameters for alarms
-
 ## Example Automations
 
 ### Zone-based Locking
@@ -95,13 +106,13 @@ automation:
   - alias: "Auto-lock scooter when leaving home"
     trigger:
       - platform: zone
-        entity_id: device_tracker.scooter_vin_location
+        entity_id: device_tracker.YOUR_SCOOTER_location
         zone: zone.home
         event: leave
     action:
       - service: switch.turn_on
         target:
-          entity_id: switch.scooter_vin_lock
+          entity_id: switch.YOUR_SCOOTER_lock
 ```
 
 ### Low Battery Alert
@@ -110,18 +121,11 @@ automation:
   - alias: "Low battery notification"
     trigger:
       - platform: numeric_state
-        entity_id: sensor.scooter_vin_battery_level
+        entity_id: sensor.YOUR_SCOOTER_battery_level
         below: 20
     action:
       - service: notify.mobile_app
         data:
-          message: "Scooter battery is low: {{ states('sensor.scooter_vin_battery_level') }}%"
+          message: "Scooter battery is low: {{ states('sensor.YOUR_SCOOTER_battery_level') }}%"
 ```
-
-## Development
-
-The component uses:
-- `aiohttp` for async HTTP requests
-- Home Assistant's `DataUpdateCoordinator` for efficient polling
-- Proper error handling and logging
 
