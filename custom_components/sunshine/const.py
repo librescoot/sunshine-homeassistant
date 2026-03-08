@@ -31,3 +31,15 @@ BLINKER_LEFT = "left"
 BLINKER_RIGHT = "right"
 BLINKER_BOTH = "both"
 BLINKER_OFF = "off"
+
+SCOOTER_COLOR_IMAGE_INDEX = {
+    "black": 0,
+    "white": 1,
+    "pine": 2,
+    "stone": 3,
+    "coral": 4,
+    "red": 5,
+    "blue": 6,
+    "eclipse": 7,
+    "idioteque": 8,
+}

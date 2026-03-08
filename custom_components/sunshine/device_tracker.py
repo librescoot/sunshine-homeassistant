@@ -9,7 +9,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, SCOOTER_COLOR_IMAGE_INDEX
 from .coordinator import SunshineDataUpdateCoordinator
 from .entity import SunshineEntity
 
@@ -97,6 +97,17 @@ class SunshineDeviceTracker(SunshineEntity, TrackerEntity):
             return scooter_data.get("location_accuracy", 10)
         return 10
     
+    @property
+    def entity_picture(self) -> str | None:
+        """Return the scooter image based on color."""
+        if scooter_data := self.coordinator.data.get(self.scooter_id):
+            color = scooter_data.get("color")
+            if color and color in SCOOTER_COLOR_IMAGE_INDEX:
+                index = SCOOTER_COLOR_IMAGE_INDEX[color]
+                base_url = self.coordinator.api.base_url
+                return f"{base_url}/cached/scooter/side_{index}_400x400.png"
+        return None
+
     @property
     def source_type(self) -> str:
         """Return the source type, eg gps or router, of the device."""
