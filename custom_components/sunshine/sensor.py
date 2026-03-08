@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Callable
 
 from homeassistant.components.sensor import (
@@ -123,7 +124,7 @@ SENSOR_TYPES: list[SunshineSensorEntityDescription] = [
         name="Last Seen",
         device_class=SensorDeviceClass.TIMESTAMP,
         icon="mdi:clock-outline",
-        value_fn=lambda d: d.get("last_seen_at"),
+        value_fn=lambda d: datetime.fromisoformat(d["last_seen_at"]) if d.get("last_seen_at") else None,
     ),
     # --- Battery 0 details ---
     SunshineSensorEntityDescription(

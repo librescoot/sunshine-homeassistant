@@ -56,21 +56,29 @@ class SunshineDataUpdateCoordinator(DataUpdateCoordinator[dict[str, dict[str, An
 
     async def _async_update_data(self) -> dict[str, dict[str, Any]]:
         """Update data via API."""
+        _LOGGER.debug("Polling scooter data")
         try:
             async with timeout(30):
                 scooters_list = await self.api.get_scooters()
                 if not scooters_list:
+                    _LOGGER.debug("No scooters returned from API")
                     return {}
 
                 # Fetch detailed data for each scooter
                 tasks = [self.api.get_scooter(scooter["id"]) for scooter in scooters_list]
                 detailed_scooters = await asyncio.gather(*tasks)
 
-                return {
+                result = {
                     scooter["id"]: scooter
                     for scooter in detailed_scooters
                     if "id" in scooter
                 }
+                for sid, data in result.items():
+                    _LOGGER.debug(
+                        "Scooter %s: state=%s, last_seen=%s",
+                        sid, data.get("state"), data.get("last_seen_at"),
+                    )
+                return result
         except TimeoutError as err:
             raise UpdateFailed(f"Timeout fetching scooter data") from err
         except Exception as err:
