@@ -110,6 +110,7 @@ class SunshineSelect(SunshineEntity, SelectEntity):
             await api_method(self.scooter_id, option)
             self._attr_current_option = option
             await self.coordinator.async_request_refresh()
+            self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error(
                 "Failed to set %s to %s for scooter %s: %s",

@@ -133,6 +133,7 @@ class SunshineButton(SunshineEntity, ButtonEntity):
             if self.entity_description.press_fn:
                 await self.entity_description.press_fn(self.api, self.scooter_id)
                 await self.coordinator.async_request_refresh()
+                self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error(
                 "Failed to press button %s for scooter %s: %s",

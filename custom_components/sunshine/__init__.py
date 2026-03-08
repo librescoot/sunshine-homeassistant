@@ -70,6 +70,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         scooter_id = entity_id.split(".")[-1].replace("_lock", "")
         await api.trigger_alarm(scooter_id, duration)
         await coordinator.async_request_refresh()
+        coordinator.async_request_delayed_refresh()
 
     async def handle_get_state(call: ServiceCall) -> None:
         """Handle get state / request telemetry service call."""
@@ -77,6 +78,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         scooter_id = entity_id.split(".")[-1].replace("_lock", "")
         await api.get_state(scooter_id)
         await coordinator.async_request_refresh()
+        coordinator.async_request_delayed_refresh()
 
     async def handle_set_destination(call: ServiceCall) -> None:
         """Handle set destination service call."""

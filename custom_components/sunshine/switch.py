@@ -60,6 +60,7 @@ class SunshineLockSwitch(SunshineEntity, SwitchEntity):
         try:
             await self.api.lock(self.scooter_id)
             await self.coordinator.async_request_refresh()
+            self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error("Failed to lock scooter %s: %s", self.scooter_id, err)
 
@@ -68,6 +69,7 @@ class SunshineLockSwitch(SunshineEntity, SwitchEntity):
         try:
             await self.api.unlock(self.scooter_id)
             await self.coordinator.async_request_refresh()
+            self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error("Failed to unlock scooter %s: %s", self.scooter_id, err)
 
@@ -97,6 +99,7 @@ class SunshineAlarmSwitch(SunshineEntity, SwitchEntity):
         try:
             await self.api.alarm_arm(self.scooter_id)
             await self.coordinator.async_request_refresh()
+            self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error("Failed to arm alarm for scooter %s: %s", self.scooter_id, err)
 
@@ -105,5 +108,6 @@ class SunshineAlarmSwitch(SunshineEntity, SwitchEntity):
         try:
             await self.api.alarm_disarm(self.scooter_id)
             await self.coordinator.async_request_refresh()
+            self.coordinator.async_request_delayed_refresh()
         except Exception as err:
             _LOGGER.error("Failed to disarm alarm for scooter %s: %s", self.scooter_id, err)

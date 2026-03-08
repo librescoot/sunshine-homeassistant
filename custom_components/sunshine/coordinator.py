@@ -6,7 +6,8 @@ from datetime import timedelta
 import logging
 from typing import Any
 
-from homeassistant.core import HomeAssistant
+from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import SunshineAPI
@@ -33,7 +34,21 @@ class SunshineDataUpdateCoordinator(DataUpdateCoordinator[dict[str, dict[str, An
             update_interval=UPDATE_INTERVAL,
         )
         self.api = api
-    
+        self._delayed_refresh_unsub: CALLBACK_TYPE | None = None
+
+    @callback
+    def async_request_delayed_refresh(self, delay: float = 5.0) -> None:
+        """Schedule a data refresh after a delay to catch state changes."""
+        if self._delayed_refresh_unsub:
+            self._delayed_refresh_unsub()
+
+        @callback
+        def _async_refresh(_now) -> None:
+            self._delayed_refresh_unsub = None
+            self.hass.async_create_task(self.async_request_refresh())
+
+        self._delayed_refresh_unsub = async_call_later(self.hass, delay, _async_refresh)
+
     async def _async_update_data(self) -> dict[str, dict[str, Any]]:
         """Update data via API."""
         try:
