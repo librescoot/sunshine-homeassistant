@@ -14,18 +14,56 @@ trigger_alarm:
       selector:
         text:
 
-request_telemetry:
-  name: Request Telemetry
-  description: Request fresh telemetry data from the scooter
+get_state:
+  name: Request State
+  description: Request fresh telemetry/state data from the scooter
   target:
     entity:
       integration: sunshine
       domain: switch
 
-update_firmware:
-  name: Update Firmware
-  description: Initiate a firmware update on the scooter
+set_destination:
+  name: Set Destination
+  description: Set a navigation destination on the scooter
   target:
     entity:
       integration: sunshine
-      domain: switch
+      domain: device_tracker
+  fields:
+    latitude:
+      name: Latitude
+      description: Destination latitude
+      required: true
+      example: 52.520008
+      selector:
+        number:
+          min: -90
+          max: 90
+          step: 0.000001
+          mode: box
+    longitude:
+      name: Longitude
+      description: Destination longitude
+      required: true
+      example: 13.404954
+      selector:
+        number:
+          min: -180
+          max: 180
+          step: 0.000001
+          mode: box
+    address:
+      name: Address
+      description: Optional address label for the destination
+      required: false
+      example: "Brandenburger Tor, Berlin"
+      selector:
+        text:
+
+clear_destination:
+  name: Clear Destination
+  description: Clear the current navigation destination
+  target:
+    entity:
+      integration: sunshine
+      domain: device_tracker

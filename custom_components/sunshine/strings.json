@@ -10,7 +10,7 @@
         },
         "data_description": {
           "token": "Your Sunshine API bearer token. Get it from https://rescoot.org/account#new_token_form",
-          "base_url": "The base URL for the Sunshine API (default: https://rescoot.org)"
+          "base_url": "The base URL for the Sunshine API (default: https://sunshine.rescoot.org)"
         }
       }
     },
