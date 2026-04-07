@@ -1,7 +1,6 @@
 """Data update coordinator for Sunshine Scooter integration."""
 from __future__ import annotations
 
-import asyncio
 from datetime import timedelta
 import logging
 from typing import Any
@@ -59,18 +58,15 @@ class SunshineDataUpdateCoordinator(DataUpdateCoordinator[dict[str, dict[str, An
         _LOGGER.debug("Polling scooter data")
         try:
             async with timeout(30):
+                # Single bulk request returns full telemetry for all scooters
                 scooters_list = await self.api.get_scooters()
                 if not scooters_list:
                     _LOGGER.debug("No scooters returned from API")
                     return {}
 
-                # Fetch detailed data for each scooter
-                tasks = [self.api.get_scooter(scooter["id"]) for scooter in scooters_list]
-                detailed_scooters = await asyncio.gather(*tasks)
-
                 result = {
                     scooter["id"]: scooter
-                    for scooter in detailed_scooters
+                    for scooter in scooters_list
                     if "id" in scooter
                 }
                 for sid, data in result.items():
