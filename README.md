@@ -3,6 +3,8 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=librescoot&repository=sunshine-homeassistant&category=integration)
 
+Part of the [Librescoot](https://librescoot.org/) open-source platform.
+
 This custom component integrates Sunshine scooters with Home Assistant, providing full control and monitoring capabilities.
 
 ## Features
@@ -129,3 +131,13 @@ automation:
           message: "Scooter battery is low: {{ states('sensor.YOUR_SCOOTER_battery_level') }}%"
 ```
 
+## License
+
+This project is dual-licensed. The source code is available under the
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
+The maintainers reserve the right to grant separate licenses for commercial distribution; please contact the maintainers to discuss commercial licensing.
+
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+
+[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
