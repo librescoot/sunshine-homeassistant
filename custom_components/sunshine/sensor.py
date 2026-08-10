@@ -58,6 +58,34 @@ def _get_connectivity_field(data: dict, field: str) -> Any:
     return None
 
 
+def _get_connectivity_status_field(data: dict, field: str) -> Any:
+    """Extract a field from the scooter connectivity_status object."""
+    if status := data.get("connectivity_status"):
+        return status.get(field)
+    return None
+
+
+def _get_engine_status_field(data: dict, field: str) -> Any:
+    """Extract a field from the scooter engine_status object."""
+    if status := data.get("engine_status"):
+        return status.get(field)
+    return None
+
+
+def _get_handlebar_field(data: dict, field: str) -> Any:
+    """Extract a field from the scooter handlebar_status object."""
+    if status := data.get("handlebar_status"):
+        return status.get(field)
+    return None
+
+
+def _get_dashboard_field(data: dict, field: str) -> Any:
+    """Extract a field from the scooter dashboard_status object."""
+    if status := data.get("dashboard_status"):
+        return status.get(field)
+    return None
+
+
 @dataclass(frozen=True, kw_only=True)
 class SunshineSensorEntityDescription(SensorEntityDescription):
     """Describes a Sunshine sensor entity."""
@@ -257,6 +285,87 @@ SENSOR_TYPES: list[SunshineSensorEntityDescription] = [
         name="Signal Quality",
         icon="mdi:signal",
         value_fn=lambda d: _get_connectivity_field(d, "signal_quality"),
+    ),
+    # --- Range & identity ---
+    SunshineSensorEntityDescription(
+        key="estimated_range",
+        name="Estimated Range",
+        native_unit_of_measurement="km",
+        device_class=SensorDeviceClass.DISTANCE,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:map-marker-distance",
+        value_fn=lambda d: d.get("estimated_range"),
+    ),
+    SunshineSensorEntityDescription(
+        key="license_plate",
+        name="License Plate",
+        icon="mdi:car-brake-alert",
+        value_fn=lambda d: d.get("license_plate"),
+    ),
+    SunshineSensorEntityDescription(
+        key="firmware_version",
+        name="Firmware Version",
+        icon="mdi:memory",
+        value_fn=lambda d: d.get("radio_gaga_version"),
+    ),
+    SunshineSensorEntityDescription(
+        key="temperature",
+        name="Temperature",
+        native_unit_of_measurement="°C",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: d.get("temperature"),
+    ),
+    # --- Connectivity status ---
+    SunshineSensorEntityDescription(
+        key="internet_status",
+        name="Internet Status",
+        icon="mdi:access-point-network",
+        value_fn=lambda d: _get_connectivity_status_field(d, "internet_status"),
+    ),
+    SunshineSensorEntityDescription(
+        key="cloud_status",
+        name="Cloud Status",
+        icon="mdi:cloud-outline",
+        value_fn=lambda d: _get_connectivity_status_field(d, "cloud_status"),
+    ),
+    SunshineSensorEntityDescription(
+        key="access_tech",
+        name="Access Technology",
+        icon="mdi:signal-cellular-outline",
+        value_fn=lambda d: _get_connectivity_status_field(d, "access_tech"),
+    ),
+    # --- Engine status ---
+    SunshineSensorEntityDescription(
+        key="engine_state",
+        name="Engine State",
+        icon="mdi:engine-outline",
+        value_fn=lambda d: _get_engine_status_field(d, "state"),
+    ),
+    SunshineSensorEntityDescription(
+        key="kers_state",
+        name="KERS State",
+        icon="mdi:battery-charging",
+        value_fn=lambda d: _get_engine_status_field(d, "kers_state"),
+    ),
+    SunshineSensorEntityDescription(
+        key="throttle_state",
+        name="Throttle State",
+        icon="mdi:accelerator",
+        value_fn=lambda d: _get_engine_status_field(d, "throttle_state"),
+    ),
+    # --- Handlebar & dashboard ---
+    SunshineSensorEntityDescription(
+        key="handlebar_position",
+        name="Handlebar Position",
+        icon="mdi:motorbike",
+        value_fn=lambda d: _get_handlebar_field(d, "position"),
+    ),
+    SunshineSensorEntityDescription(
+        key="dashboard_mode",
+        name="Dashboard Mode",
+        icon="mdi:gauge",
+        value_fn=lambda d: _get_dashboard_field(d, "mode"),
     ),
 ]
 

@@ -35,6 +35,13 @@ Each scooter is added as a device using its name as the friendly name (falls bac
 - **Engine Temperature**: Motor temperature
 - **Motor RPM**: Motor speed
 - **Signal Quality**: Cellular signal quality
+- **Estimated Range**: Estimated remaining range in km
+- **Firmware Version**: Radio-gaga firmware version
+- **License Plate**: Registered license plate (if set)
+- **Temperature**: Current scooter temperature
+- **Internet Status / Cloud Status / Access Technology**: Connectivity details
+- **Engine State / KERS State / Throttle State**: Engine status details
+- **Handlebar Position / Dashboard Mode**: Handlebar & dashboard state
 
 #### Binary Sensors
 - **Online**: Scooter connectivity status
