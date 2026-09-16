@@ -1,11 +1,10 @@
 """Data update coordinator for Sunshine Scooter integration."""
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 import logging
 from typing import Any
-
-from async_timeout import timeout
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
@@ -57,7 +56,7 @@ class SunshineDataUpdateCoordinator(DataUpdateCoordinator[dict[str, dict[str, An
         """Update data via API."""
         _LOGGER.debug("Polling scooter data")
         try:
-            async with timeout(30):
+            async with asyncio.timeout(30):
                 # Single bulk request returns full telemetry for all scooters
                 scooters_list = await self.api.get_scooters()
                 if not scooters_list:
