@@ -58,6 +58,22 @@ def _get_connectivity_field(data: dict, field: str) -> Any:
     return None
 
 
+def _get_signal_quality(data: dict) -> int | None:
+    """Return cellular signal quality as a 0-100 percentage.
+
+    modem-service publishes the ModemManager signal-quality percentage, using
+    255 as its "unknown" sentinel; anything outside 0-100 is reported as unknown.
+    """
+    value = _get_connectivity_field(data, "signal_quality")
+    try:
+        quality = int(value)
+    except (TypeError, ValueError):
+        return None
+    if not 0 <= quality <= 100:
+        return None
+    return quality
+
+
 def _get_connectivity_status_field(data: dict, field: str) -> Any:
     """Extract a field from the scooter connectivity_status object."""
     if status := data.get("connectivity_status"):
@@ -283,8 +299,10 @@ SENSOR_TYPES: list[SunshineSensorEntityDescription] = [
     SunshineSensorEntityDescription(
         key="signal_quality",
         name="Signal Quality",
+        native_unit_of_measurement="%",
+        state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:signal",
-        value_fn=lambda d: _get_connectivity_field(d, "signal_quality"),
+        value_fn=_get_signal_quality,
     ),
     # --- Range & identity ---
     SunshineSensorEntityDescription(

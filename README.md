@@ -34,7 +34,7 @@ Each scooter is added as a device using its name as the friendly name (falls bac
 - **CBB Battery Level/Health/Cycle Count**: CBB battery
 - **Engine Temperature**: Motor temperature
 - **Motor RPM**: Motor speed
-- **Signal Quality**: Cellular signal quality
+- **Signal Quality**: Cellular signal quality as a percentage (`%`, 0-100; unavailable when the modem reports the unknown sentinel)
 - **Estimated Range**: Estimated remaining range in km
 - **Firmware Version**: Radio-gaga firmware version
 - **License Plate**: Registered license plate (if set)
